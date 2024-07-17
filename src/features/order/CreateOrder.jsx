@@ -39,33 +39,42 @@ function CreateOrder() {
 
       <form>
         <div>
-          <label htmlFor="customer"> First Name</label>
-          <input id="customer" type="text" name="customer" required />
+          <label htmlFor="customer">
+            {' '}
+            <span>First Name</span>
+            <input id="customer" type="text" name="customer" required />
+          </label>
         </div>
 
         <div>
-          <label htmlFor="phone">Phone Number</label>
-          <div>
-            <input id="phone" type="tel" name="phone" required />
-          </div>
+          <label htmlFor="phone">
+            <span>Phone Number</span>
+            <div>
+              <input id="phone" type="tel" name="phone" required />
+            </div>
+          </label>
         </div>
 
         <div>
-          <label htmlFor="address">Address</label>
-          <div>
-            <input id="address" type="text" name="address" required />
-          </div>
+          <label htmlFor="address">
+            <span>Address</span>
+            <div>
+              <input id="address" type="text" name="address" required />
+            </div>
+          </label>
         </div>
 
         <div>
-          <input
-            type="checkbox"
-            name="priority"
-            id="priority"
-            // value={withPriority}
-            // onChange={(e) => setWithPriority(e.target.checked)}
-          />
-          <label htmlFor="priority">Want to give your order priority?</label>
+          <label htmlFor="priority">
+            <input
+              type="checkbox"
+              name="priority"
+              id="priority"
+              // value={withPriority}
+              // onChange={(e) => setWithPriority(e.target.checked)}
+            />
+            <span>Want to give your order priority?</span>
+          </label>
         </div>
       </form>
     </div>
