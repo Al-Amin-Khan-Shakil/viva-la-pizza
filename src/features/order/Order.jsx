@@ -3,6 +3,7 @@ import {
   formatDate,
   formatCurrency,
 } from '../../utilities/helpers';
+import { getOrder } from '../../services/apiRestaurant';
 
 const order = {
   id: 'ABCDEF',
@@ -84,10 +85,10 @@ function Order() {
           {formatCurrency(orderPrice)}
         </p>
         {priority && (
-        <p>
-          Price priority:
-          {formatCurrency(priorityPrice)}
-        </p>
+          <p>
+            Price priority:
+            {formatCurrency(priorityPrice)}
+          </p>
         )}
         <p>
           To pay on delivery:
@@ -96,6 +97,12 @@ function Order() {
       </div>
     </div>
   );
+}
+
+export async function loader({ params }) {
+  const order = await getOrder(params.orderId);
+
+  return order;
 }
 
 export default Order;
