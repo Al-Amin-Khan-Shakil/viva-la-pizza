@@ -1,10 +1,10 @@
+import { useLoaderData } from 'react-router-dom';
 import {
   calcMinutesLeft,
   formatDate,
   formatCurrency,
-} from "../../utilities/helpers";
-import { getOrder } from "../../services/apiRestaurant";
-import { useLoaderData } from "react-router-dom";
+} from '../../utilities/helpers';
+import { getOrder } from '../../services/apiRestaurant';
 
 function Order() {
   const order = useLoaderData();
@@ -26,7 +26,11 @@ function Order() {
         <h2>Status</h2>
         <div>
           {priority && <span>Priority</span>}
-          <span>{status} order</span>
+          <span>
+            {status}
+            {' '}
+            order
+          </span>
         </div>
       </div>
 
@@ -34,11 +38,12 @@ function Order() {
         <p>
           {deliveryIn >= 0
             ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😀`
-            : "Order should have arrived"}
+            : 'Order should have arrived'}
         </p>
         <p>
           (Estimated delivery:
-          {formatDate(estimatedDelivery)})
+          {formatDate(estimatedDelivery)}
+          )
         </p>
       </div>
 
