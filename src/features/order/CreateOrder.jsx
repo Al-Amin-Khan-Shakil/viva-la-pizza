@@ -50,7 +50,13 @@ function CreateOrder() {
           <label htmlFor="customer">
             {" "}
             <span>First Name</span>
-            <input id="customer" type="text" name="customer" required />
+            <input
+              className="w-full rounded-full border border-stone-200 px-4 py-2 text-sm transition-all duration-300 placeholder:text-stone-400 focus:outline-none focus:ring focus:ring-yellow-400 md:px-6 md:py-3"
+              id="customer"
+              type="text"
+              name="customer"
+              required
+            />
           </label>
         </div>
 
@@ -58,7 +64,13 @@ function CreateOrder() {
           <label htmlFor="phone">
             <span>Phone Number</span>
             <div>
-              <input id="phone" type="tel" name="phone" required />
+              <input
+                className="w-full rounded-full border border-stone-200 px-4 py-2 text-sm transition-all duration-300 placeholder:text-stone-400 focus:outline-none focus:ring focus:ring-yellow-400 md:px-6 md:py-3"
+                id="phone"
+                type="tel"
+                name="phone"
+                required
+              />
             </div>
             {formErrors?.phone && <p>{formErrors.phone}</p>}
           </label>
@@ -68,7 +80,13 @@ function CreateOrder() {
           <label htmlFor="address">
             <span>Address</span>
             <div>
-              <input id="address" type="text" name="address" required />
+              <input
+                className="w-full rounded-full border border-stone-200 px-4 py-2 text-sm transition-all duration-300 placeholder:text-stone-400 focus:outline-none focus:ring focus:ring-yellow-400 md:px-6 md:py-3"
+                id="address"
+                type="text"
+                name="address"
+                required
+              />
             </div>
           </label>
         </div>
@@ -76,6 +94,7 @@ function CreateOrder() {
         <div>
           <label htmlFor="priority">
             <input
+              className="h-6 w-6 accent-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-offset-2"
               type="checkbox"
               name="priority"
               id="priority"
