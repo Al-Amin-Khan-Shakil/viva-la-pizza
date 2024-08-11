@@ -1,13 +1,17 @@
-import formatCurrency from "../../utilities/helpers";
+import formatCurrency from '../../utilities/helpers';
 
 function CartItem({ item }) {
-  const { pizzaId, name, quantity, totalPrice } = item;
+  const {
+    pizzaId, name, quantity, totalPrice,
+  } = item;
 
   return (
     <li>
       <p>
         {quantity}
-        &times; {name}
+        &times;
+        {' '}
+        {name}
       </p>
       <div>
         <p>{formatCurrency(totalPrice)}</p>
