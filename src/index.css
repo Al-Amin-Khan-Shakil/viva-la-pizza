@@ -9,8 +9,14 @@
 
   .loader {
     width: 45px;
+
+    /* stylelint-disable */
     aspect-ratio: 0.75;
-    --c: no-repeat linear-gradient(theme(colors.stone.800) 0 0);
+
+    /* stylelint-enable */
+
+    --c: no-repeat linear-gradient(#444 0 0);
+
     background:
       var(--c) 0% 50%,
       var(--c) 50% 50%,
@@ -26,18 +32,21 @@
         50% 50%,
         100% 50%;
     }
+
     40% {
       background-position:
         0% 100%,
         50% 0%,
         100% 50%;
     }
+
     60% {
       background-position:
         0% 50%,
         50% 100%,
         100% 0%;
     }
+
     80% {
       background-position:
         0% 50%,
