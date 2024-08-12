@@ -1,7 +1,10 @@
 // import { useState } from 'react';
 
-import { Form, redirect } from 'react-router-dom';
+import {
+  Form, redirect, useActionData, useNavigation,
+} from 'react-router-dom';
 import { createOrder } from '../../services/apiRestaurant';
+import Button from '../../UI-components/Button';
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) => /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
@@ -33,44 +36,83 @@ const fakeCart = [
 ];
 
 function CreateOrder() {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
+  const formErrors = useActionData();
   // const [withPriority, setWithPriority] = useState(false);
   const cart = fakeCart;
 
   return (
-    <div>
-      <h2>Ready to order? Let&#39;s go!</h2>
+    <div className="px-4 py-6">
+      <h2 className="mb-8 text-xl font-semibold">
+        Ready to order? Let&#39;s go!
+      </h2>
 
       {/* <Form method="POST" action="/order/new"> */}
       <Form method="POST">
-        <div>
-          <label htmlFor="customer">
+        <div className="mb-5">
+          <label
+            htmlFor="customer"
+            className="flex flex-col gap-2 sm:flex-row sm:items-center"
+          >
             {' '}
-            <span>First Name</span>
-            <input id="customer" type="text" name="customer" required />
-          </label>
-        </div>
-
-        <div>
-          <label htmlFor="phone">
-            <span>Phone Number</span>
-            <div>
-              <input id="phone" type="tel" name="phone" required />
-            </div>
-          </label>
-        </div>
-
-        <div>
-          <label htmlFor="address">
-            <span>Address</span>
-            <div>
-              <input id="address" type="text" name="address" required />
-            </div>
-          </label>
-        </div>
-
-        <div>
-          <label htmlFor="priority">
+            <span className="ml-1 sm:ml-0 sm:basis-40">First Name</span>
             <input
+              className="input w-full"
+              id="customer"
+              type="text"
+              name="customer"
+              required
+            />
+          </label>
+        </div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="phone"
+            className="flex flex-col gap-2 sm:flex-row sm:items-center"
+          >
+            <span className="ml-1 sm:ml-0 sm:basis-40">Phone Number</span>
+            <div className="w-full grow">
+              <input
+                className="input w-full"
+                id="phone"
+                type="tel"
+                name="phone"
+                required
+              />
+
+              {formErrors?.phone && (
+                <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
+                  {formErrors.phone}
+                </p>
+              )}
+            </div>
+          </label>
+        </div>
+
+        <div className="mb-5">
+          <label
+            htmlFor="address"
+            className="flex flex-col gap-2 sm:flex-row sm:items-center"
+          >
+            <span className="ml-1 sm:ml-0 sm:basis-40">Address</span>
+            <div className="w-full grow">
+              <input
+                className="input w-full"
+                id="address"
+                type="text"
+                name="address"
+                required
+              />
+            </div>
+          </label>
+        </div>
+
+        <div className="mb-10">
+          <label htmlFor="priority" className="flex items-center gap-5">
+            <input
+              className="h-6 w-6 accent-yellow-400 focus:ring focus:ring-yellow-400 focus:ring-offset-2"
               type="checkbox"
               name="priority"
               id="priority"
@@ -82,7 +124,9 @@ function CreateOrder() {
         </div>
         <div>
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <button type="submit">Order now</button>
+          <Button type="primary" disabled={isSubmitting}>
+            {isSubmitting ? 'Placing order...' : 'Order now'}
+          </Button>
         </div>
       </Form>
     </div>
@@ -98,7 +142,16 @@ export async function action({ request }) {
     priority: data.priority === 'on',
   };
 
+  const errors = {};
+
+  if (!isValidPhone(order.phone)) {
+    errors.phone = 'Please give us your correct phone number. We might need it to contact you.';
+  }
+
+  if (Object.keys(errors).length > 0) return errors;
+
   const newOrder = await createOrder(order);
+
   return redirect(`/order/${newOrder.id}`);
 }
 
