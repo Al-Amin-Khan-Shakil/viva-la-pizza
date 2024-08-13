@@ -1,8 +1,8 @@
-// import { useState } from 'react';
-
+import { useState } from 'react';
 import {
   Form, redirect, useActionData, useNavigation,
 } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { createOrder } from '../../services/apiRestaurant';
 import Button from '../../UI-components/Button';
 
@@ -39,7 +39,8 @@ function CreateOrder() {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === 'submitting';
   const formErrors = useActionData();
-  // const [withPriority, setWithPriority] = useState(false);
+  const username = useSelector((state) => state.user.username);
+  const [withPriority, setWithPriority] = useState(false);
   const cart = fakeCart;
 
   return (
@@ -62,6 +63,7 @@ function CreateOrder() {
               id="customer"
               type="text"
               name="customer"
+              defaultValue={username}
               required
             />
           </label>
@@ -116,8 +118,8 @@ function CreateOrder() {
               type="checkbox"
               name="priority"
               id="priority"
-              // value={withPriority}
-              // onChange={(e) => setWithPriority(e.target.checked)}
+              value={withPriority}
+              onChange={(e) => setWithPriority(e.target.checked)}
             />
             <span>Want to give your order priority?</span>
           </label>
