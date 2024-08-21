@@ -1,11 +1,11 @@
-import { useLoaderData } from 'react-router-dom';
+import { useLoaderData } from "react-router-dom";
 import {
   calcMinutesLeft,
   formatDate,
   formatCurrency,
-} from '../../utilities/helpers';
-import { getOrder } from '../../services/apiRestaurant';
-import OrderItem from './OrderItem';
+} from "../../utilities/helpers";
+import { getOrder } from "../../services/apiRestaurant";
+import OrderItem from "./OrderItem";
 
 function Order() {
   const order = useLoaderData();
@@ -24,12 +24,7 @@ function Order() {
   return (
     <div className="space-y-8 px-4 py-6">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 className="text-xl font-semibold">
-          Order #
-          {id}
-          {' '}
-          status
-        </h2>
+        <h2 className="text-xl font-semibold">Order #{id} status</h2>
         <div className="space-x-2">
           {priority && (
             <span className="rounded-full bg-red-500 px-3 py-1 text-sm font-semibold uppercase tracking-wide text-red-50">
@@ -37,9 +32,7 @@ function Order() {
             </span>
           )}
           <span className="rounded-full bg-green-500 px-3 py-1 text-sm font-semibold uppercase tracking-wide text-green-50">
-            {status}
-            {' '}
-            order
+            {status} order
           </span>
         </div>
       </div>
@@ -48,18 +41,17 @@ function Order() {
         <p className="font-medium">
           {deliveryIn >= 0
             ? `Only ${calcMinutesLeft(estimatedDelivery)} minutes left 😀`
-            : 'Order should have arrived'}
+            : "Order should have arrived"}
         </p>
         <p className="text-xs text-stone-500">
           (Estimated delivery:
-          {formatDate(estimatedDelivery)}
-          )
+          {formatDate(estimatedDelivery)})
         </p>
       </div>
 
       <ul className="divide-y divide-stone-200 border-b border-t">
         {cart.map((item) => (
-          <OrderItem item={item} key={item.id} />
+          <OrderItem item={item} key={`${item.name} ${item.pizzaId}`} />
         ))}
       </ul>
 
