@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createOrder } from "../../services/apiRestaurant";
 import Button from "../../UI-components/Button";
 import { clearCart, getCart, getTotalCartPrice } from "../cart/cartSlice";
 import EmptyCart from "../cart/EmptyCart";
 import store from "../../store";
 import { formatCurrency } from "../../utilities/helpers";
+import { fetchAddess } from "../user/userSlice";
 
 // https://uibakery.io/regex-library/phone-number
 const isValidPhone = (str) =>
@@ -18,12 +19,29 @@ function CreateOrder() {
   const navigation = useNavigation();
   const cart = useSelector(getCart);
   const formErrors = useActionData();
-  const username = useSelector((state) => state.user.username);
+  const dispatch = useDispatch();
+  const {
+    username,
+    status: addressStatus,
+    error: errorAddress,
+  } = useSelector((state) => state.user);
+  const isLoadingAddress = addressStatus === "loading";
   const isSubmitting = navigation.state === "submitting";
   const [withPriority, setWithPriority] = useState(false);
+  const [inputAddress, setInputAddress] = useState("");
   const totalCartPrice = useSelector(getTotalCartPrice);
   const priorityPrice = withPriority ? totalCartPrice * 0.2 : 0;
   const totalPrice = totalCartPrice + priorityPrice;
+
+  const handleGeoLocation = async (e) => {
+    try {
+      e.preventDefault();
+      const response = await dispatch(fetchAddess());
+      setInputAddress(response.payload.address);
+    } catch (error) {
+      console.error("Error fetching address:", error);
+    }
+  };
 
   if (!cart.length) return <EmptyCart />;
 
@@ -83,14 +101,35 @@ function CreateOrder() {
             className="flex flex-col gap-2 sm:flex-row sm:items-center"
           >
             <span className="ml-1 sm:ml-0 sm:basis-40">Address</span>
-            <div className="w-full grow">
+            <div className="relative w-full grow">
               <input
                 className="input w-full"
                 id="address"
                 type="text"
                 name="address"
+                disabled={isLoadingAddress}
+                value={inputAddress}
+                onChange={(e) => setInputAddress(e.target.value)}
                 required
               />
+
+              {addressStatus === "error" && (
+                <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
+                  {errorAddress}
+                </p>
+              )}
+
+              <span className="absolute right-1.5 top-[5px] z-50">
+                {!inputAddress && (
+                  <Button
+                    disabled={isLoadingAddress}
+                    type="small"
+                    onClick={handleGeoLocation}
+                  >
+                    🚩Location
+                  </Button>
+                )}
+              </span>
             </div>
           </label>
         </div>
@@ -110,7 +149,7 @@ function CreateOrder() {
         </div>
         <div className="space-x-2">
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
-          <Button type="primary" disabled={isSubmitting}>
+          <Button type="primary" disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting
               ? "Placing order..."
               : `Order now from ${formatCurrency(totalPrice)}`}

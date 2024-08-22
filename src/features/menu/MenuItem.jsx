@@ -1,11 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import Button from "../../UI-components/Button";
-import { formatCurrency } from "../../utilities/helpers";
-import { addItem } from "../cart/cartSlice";
+import { useDispatch } from 'react-redux';
+import Button from '../../UI-components/Button';
+import { formatCurrency } from '../../utilities/helpers';
+import { addItem } from '../cart/cartSlice';
 
 function MenuItem({ pizza }) {
   const dispatch = useDispatch();
-  const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
+  const {
+    id, name, unitPrice, ingredients, soldOut, imageUrl,
+  } = pizza;
 
   const handleAddToCart = () => {
     const newItem = {
@@ -24,12 +26,12 @@ function MenuItem({ pizza }) {
       <img
         src={imageUrl}
         alt={name}
-        className={`h-24 ${soldOut ? "opacity-70 grayscale" : ""}`}
+        className={`h-24 ${soldOut ? 'opacity-70 grayscale' : ''}`}
       />
       <div className="flex grow flex-col justify-between py-0.5">
         <p className="font-medium">{name}</p>
         <p className="text-sm capitalize italic text-stone-500">
-          {ingredients.join(", ")}
+          {ingredients.join(', ')}
         </p>
         <div className="mt-auto flex items-center justify-between">
           {!soldOut ? (
