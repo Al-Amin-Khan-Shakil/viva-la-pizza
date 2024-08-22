@@ -22,6 +22,7 @@ function CreateOrder() {
   const dispatch = useDispatch();
   const {
     username,
+    position,
     status: addressStatus,
     error: errorAddress,
   } = useSelector((state) => state.user);
@@ -149,6 +150,19 @@ function CreateOrder() {
         </div>
         <div className="space-x-2">
           <input type="hidden" name="cart" value={JSON.stringify(cart)} />
+          <input
+            type="hidden"
+            name="position"
+            value={
+              position.longitude && position.latitude
+                ? JSON.stringify({
+                    lat: position.latitude,
+                    lon: position.longitude,
+                  })
+                : ""
+            }
+          />
+
           <Button type="primary" disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting
               ? "Placing order..."
