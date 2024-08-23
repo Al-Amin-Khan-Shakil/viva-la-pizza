@@ -1,19 +1,20 @@
-import { useState } from "react";
-import { Form, redirect, useActionData, useNavigation } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { createOrder } from "../../services/apiRestaurant";
-import Button from "../../UI-components/Button";
-import { clearCart, getCart, getTotalCartPrice } from "../cart/cartSlice";
-import EmptyCart from "../cart/EmptyCart";
-import store from "../../store";
-import { formatCurrency } from "../../utilities/helpers";
-import { fetchAddess } from "../user/userSlice";
+import { useState } from 'react';
+import {
+  Form, redirect, useActionData, useNavigation,
+} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { createOrder } from '../../services/apiRestaurant';
+import Button from '../../UI-components/Button';
+import { clearCart, getCart, getTotalCartPrice } from '../cart/cartSlice';
+import EmptyCart from '../cart/EmptyCart';
+import store from '../../store';
+import { formatCurrency } from '../../utilities/helpers';
+import { fetchAddess } from '../user/userSlice';
 
 // https://uibakery.io/regex-library/phone-number
-const isValidPhone = (str) =>
-  /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
-    str,
-  );
+const isValidPhone = (str) => /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
+  str,
+);
 
 function CreateOrder() {
   const navigation = useNavigation();
@@ -26,10 +27,10 @@ function CreateOrder() {
     status: addressStatus,
     error: errorAddress,
   } = useSelector((state) => state.user);
-  const isLoadingAddress = addressStatus === "loading";
-  const isSubmitting = navigation.state === "submitting";
+  const isLoadingAddress = addressStatus === 'loading';
+  const isSubmitting = navigation.state === 'submitting';
   const [withPriority, setWithPriority] = useState(false);
-  const [inputAddress, setInputAddress] = useState("");
+  const [inputAddress, setInputAddress] = useState('');
   const totalCartPrice = useSelector(getTotalCartPrice);
   const priorityPrice = withPriority ? totalCartPrice * 0.2 : 0;
   const totalPrice = totalCartPrice + priorityPrice;
@@ -40,7 +41,7 @@ function CreateOrder() {
       const response = await dispatch(fetchAddess());
       setInputAddress(response.payload.address);
     } catch (error) {
-      console.error("Error fetching address:", error);
+      console.error('Error fetching address:', error);
     }
   };
 
@@ -59,7 +60,7 @@ function CreateOrder() {
             htmlFor="customer"
             className="flex flex-col gap-2 sm:flex-row sm:items-center"
           >
-            {" "}
+            {' '}
             <span className="ml-1 sm:ml-0 sm:basis-40">First Name</span>
             <input
               className="input w-full"
@@ -114,7 +115,7 @@ function CreateOrder() {
                 required
               />
 
-              {addressStatus === "error" && (
+              {addressStatus === 'error' && (
                 <p className="mt-2 rounded-md bg-red-100 p-2 text-xs text-red-700">
                   {errorAddress}
                 </p>
@@ -156,16 +157,16 @@ function CreateOrder() {
             value={
               position.longitude && position.latitude
                 ? JSON.stringify({
-                    lat: position.latitude,
-                    lon: position.longitude,
-                  })
-                : ""
+                  lat: position.latitude,
+                  lon: position.longitude,
+                })
+                : ''
             }
           />
 
           <Button type="primary" disabled={isSubmitting || isLoadingAddress}>
             {isSubmitting
-              ? "Placing order..."
+              ? 'Placing order...'
               : `Order now from ${formatCurrency(totalPrice)}`}
           </Button>
           <Button type="secondary" to="/cart">
@@ -183,14 +184,13 @@ export async function action({ request }) {
   const order = {
     ...data,
     cart: JSON.parse(data.cart),
-    priority: data.priority === "true",
+    priority: data.priority === 'true',
   };
 
   const errors = {};
 
   if (!isValidPhone(order.phone)) {
-    errors.phone =
-      "Please give us your correct phone number. We might need it to contact you.";
+    errors.phone = 'Please give us your correct phone number. We might need it to contact you.';
   }
 
   if (Object.keys(errors).length > 0) return errors;
