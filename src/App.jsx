@@ -43,7 +43,11 @@ const router = createBrowserRouter([
       },
     ],
   },
-]);
+],
+{
+  basename: '/viva-la-pizza', // Set the base URL for the app
+  // This is useful for deploying the app to a subdirectory
+});
 
 function App() {
   return <RouterProvider router={router} />;
